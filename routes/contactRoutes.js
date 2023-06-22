@@ -4,9 +4,6 @@ const{getContacts,getContact,createContact,updateContact,deleteContact}=require(
 // router.route("/").get((req,res)=>{
 //   res.status(201).json({message:"get all the contacts"})  
 // })
-router.get("/",getContacts)
-router.get("/:id",getContact)
-router.post("/createContact",createContact)
-router.put("/:id",updateContact)
-router.delete("/:id",deleteContact)
+router.route("/").get(getContacts).post(createContact)
+router.route("/:id").get(getContact).put(updateContact).delete(deleteContact)
 module.exports=router;
