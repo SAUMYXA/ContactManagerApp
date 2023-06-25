@@ -51,7 +51,7 @@ const loginUser=asyncHandler(async(req,res)=>{
     res.status(201).json({msg:"User has been login in"})
 })
 const currentUser=asyncHandler(async(req,res)=>{
-    res.status(201).json({msg:"User's current informaton"})
+    res.status(201).json(req.user)
 })
 
 module.exports={registerUser,loginUser,currentUser}
