@@ -32,7 +32,10 @@ res.status(201).json(contact)
             res.status(404)
             throw new Error("Contact not found!")
         }
-        
+        if(Contact.user_id.toString()!==req.user.id){
+            res.status(403)
+            throw new Error("user don't have permission to update other user's contact ")
+        }
         const updatedContact=await Contact.findByIdAndUpdate(req.params.id,req.body,{new:true})
         res.status(201).json(updatedContact)
     })
@@ -41,6 +44,10 @@ res.status(201).json(contact)
         if(!contact){
             res.status(404)
             throw new Error("Contact not found!")
+        }
+        if(Contact.user_id.toString()!==req.user.id){
+            res.status(403)
+            throw new Error("user don't have permission to delete other user's contact ")
         }
         await Contact.findByIdAndDelete(req.params.id);
         res.status(201).json({message:`contact has been deleted for ${req.params.id}`})
