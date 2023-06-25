@@ -1,25 +1,47 @@
 const asyncHandler=require("express-async-handler")
+const Contact=require("../models/contactModel")
 const getContacts= asyncHandler(async (req,res)=>{
-    res.status(201).json({message:"get all the contacts"})
+    const contacts=await Contact.find;
+    res.status(201).json(contacts);
     });
     const getContact=asyncHandler(async (req,res)=>{
-        res.status(201).json({message:`get contact for ${req.params.id}`})
+        const contact=await Contact.findById(req.params.id);
+        if(!contact){
+            res.status(404);
+            throw new Error("Contact not found!")
+        }
+        res.status(201).json(contact);
         })
 
-    const createContact=asyncHandler(asyncHandler(async(req,res)=>{
-        console.log("the requestbody is:",req.body);
+    const createContact=asyncHandler(async(req,res)=>{
+        console.log("the request body is:",req.body);
         const{name,email,phone}=req.body;
         if(!name|| !email || !phone){
             res.staus(400);
             throw new Error("All fields are mandatory!")
         }
-res.status(201).json({message:"create contacts"})
-    }))
+        const contact=await Contact.create({
+            name,phone,email
+        })
+res.status(201).json(contact)
+    })
 
     const updateContact=asyncHandler(async(req,res)=>{
-        res.status(201).json({message:`Contact has been updated for ${req.params.id}`})
+        const contact=await Contact.findById(req.params.id);
+        if(!contact){
+            res.status(404)
+            throw new Error("Contact not found!")
+        }
+        const updatedContact=await Contact.findByIdAndUpdate(req.params.id,req.body,{new:true})
+        res.status(201).json(updatedContact)
     })
     const deleteContact=asyncHandler(async(req,res)=>{
+        const contact=await Contact.findById(req.params.id);
+        if(!contact){
+            res.status(404)
+            throw new Error("Contact not found!")
+        }
+        await Contact.findByIdAndDelete(req.params.id);
         res.status(201).json({message:`contact has been deleted for ${req.params.id}`})
     })
     module.exports={getContacts,getContact,createContact,updateContact,deleteContact};
