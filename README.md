@@ -40,7 +40,3 @@ To secure these endpoints, token validation is implemented. Ensure that you incl
     cd contacts-api
     npm install
 
-3.**Run the Application:**
-
-   ```bash
-   nodemon
